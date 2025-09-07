@@ -1,6 +1,6 @@
 # Corporate Bond Spread Dashboard
 
-Tracks and visualizes U.S. corporate bond spreads over time, comparing Investment Grade (IG) and High Yield (HY) OAS, and contextualizing against Treasury benchmarks. Outputs charts and a current spreads table and is designed to auto-update daily via GitHub Actions.
+Tracks and visualizes U.S. corporate bond spreads over time, comparing Investment Grade (IG) and High Yield (HY) OAS, and contextualizing against Treasury benchmarks. It also displays recessions which are represented by the grey portions. Outputs charts and a current spreads table and is designed to auto-update daily via GitHub Actions.
 
 Last updated: 2025-09-07
 
