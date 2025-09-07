@@ -89,6 +89,54 @@ def plot_oas_5y(df: pd.DataFrame) -> Path:
     return plot_oas_window(df, 5, "ig_hy_oas_5y.png", "IG vs HY OAS (last 5 years)")
 
 
+def plot_hy_ig_spread_window(df: pd.DataFrame, years: int, out_name: str, title: str) -> Path:
+    end = df.index.max()
+    start = end - pd.DateOffset(years=years)
+    sub = df.loc[df.index >= start]
+
+    plt.figure(figsize=(10, 4.0))
+    sns.set_style("whitegrid")
+    if "HY_IG_SPREAD" in sub.columns:
+        plt.plot(sub.index, sub["HY_IG_SPREAD"], color="#d62728", linewidth=2)
+    for s, e in recession_spans(sub):
+        plt.axvspan(s, e, color="gray", alpha=0.2, linewidth=0)
+    plt.title(title)
+    plt.ylabel("Spread (%)")
+    plt.xlabel("")
+    plt.tight_layout()
+    out = FIG_DIR / out_name
+    plt.savefig(out, dpi=150)
+    plt.close()
+    return out
+
+
+def plot_quality_ladder_window(df: pd.DataFrame, years: int, out_name: str, title: str) -> Path | None:
+    end = df.index.max()
+    start = end - pd.DateOffset(years=years)
+    sub = df.loc[df.index >= start]
+
+    ladder_cols = [c for c in ["AAA_OAS", "AA_OAS", "A_OAS", "BBB_OAS"] if c in sub.columns]
+    if not ladder_cols:
+        return None
+
+    plt.figure(figsize=(10, 5.0))
+    sns.set_style("whitegrid")
+    colors = {"AAA_OAS": "#2ca02c", "AA_OAS": "#8c564b", "A_OAS": "#9467bd", "BBB_OAS": "#ff7f0e"}
+    for col in ladder_cols:
+        plt.plot(sub.index, sub[col], label=col.replace("_OAS", " OAS"), linewidth=1.8, color=colors.get(col))
+    for s, e in recession_spans(sub):
+        plt.axvspan(s, e, color="gray", alpha=0.2, linewidth=0)
+    plt.title(title)
+    plt.ylabel("Spread (%)")
+    plt.xlabel("")
+    plt.legend(ncol=3)
+    plt.tight_layout()
+    out = FIG_DIR / out_name
+    plt.savefig(out, dpi=150)
+    plt.close()
+    return out
+
+
 def build_current_table(df: pd.DataFrame) -> pd.DataFrame:
     end = df.index.max()
     one_year_ago = end - pd.DateOffset(years=1)
@@ -145,12 +193,17 @@ def main() -> None:
     df = load()
     chart_path = plot_oas_5y(df)
     chart_20y = plot_oas_window(df, 20, "ig_hy_oas_20y.png", "IG vs HY OAS (last 20 years)")
+    hy_ig_20y = plot_hy_ig_spread_window(df, 20, "hy_ig_spread_20y.png", "HY – IG Spread (last 20 years)")
+    ladder_20y = plot_quality_ladder_window(df, 20, "quality_ladder_20y.png", "Quality Ladder OAS (AAA → BBB, last 20 years)")
     table = build_current_table(df)
     csv_path = FIG_DIR / "current_spreads.csv"
     table.to_csv(csv_path, index=False)
     table_img = render_table_image(table)
     print(f"Saved chart -> {chart_path}")
     print(f"Saved chart -> {chart_20y}")
+    print(f"Saved chart -> {hy_ig_20y}")
+    if ladder_20y is not None:
+        print(f"Saved chart -> {ladder_20y}")
     print(f"Saved table -> {table_img}\nCSV -> {csv_path}")
 
 

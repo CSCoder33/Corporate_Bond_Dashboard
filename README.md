@@ -9,6 +9,10 @@ Last updated: 2025-09-07
 
 ![Current Spreads Table](reports/figures/current_spreads.png)
 
+![HY – IG Spread (last 20y)](reports/figures/hy_ig_spread_20y.png)
+
+![Quality Ladder OAS (AAA → BBB, last 20y)](reports/figures/quality_ladder_20y.png)
+
 ## Data Sources (FRED CSV)
 - IG OAS: `BAMLC0A0CM`
 - HY OAS: `BAMLH0A0HYM2`
