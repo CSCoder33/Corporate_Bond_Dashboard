@@ -1,0 +1,12 @@
+# Data and reports
+data/raw/
+data/processed/
+
+# Python
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+
+# VS Code
+.vscode/
