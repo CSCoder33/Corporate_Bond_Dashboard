@@ -72,15 +72,7 @@ def plot_oas_window(df: pd.DataFrame, years: int, out_name: str, title: str) -> 
     for s, e in recession_spans(sub):
         plt.axvspan(s, e, color="gray", alpha=0.2, linewidth=0)
 
-    # 1y high/low markers against the same sub-window
-    ystart = end - pd.DateOffset(years=1)
-    sub1 = sub.loc[sub.index >= ystart]
-    for col, color in [("IG_OAS", "#1f77b4"), ("HY_OAS", "#d62728")]:
-        if col in sub1.columns:
-            ymin = sub1[col].min()
-            ymax = sub1[col].max()
-            plt.axhline(ymin, color=color, linestyle=":", alpha=0.4)
-            plt.axhline(ymax, color=color, linestyle=":", alpha=0.4)
+    # Removed dotted 1-year high/low markers for cleaner presentation
 
     plt.title(title)
     plt.ylabel("Spread (%)")
