@@ -55,9 +55,9 @@ def recession_spans(df: pd.DataFrame) -> List[Tuple[pd.Timestamp, pd.Timestamp]]
     return spans
 
 
-def plot_oas_5y(df: pd.DataFrame) -> Path:
+def plot_oas_window(df: pd.DataFrame, years: int, out_name: str, title: str) -> Path:
     end = df.index.max()
-    start = end - pd.DateOffset(years=5)
+    start = end - pd.DateOffset(years=years)
     sub = df.loc[df.index >= start]
 
     plt.figure(figsize=(10, 5.5))
@@ -72,7 +72,7 @@ def plot_oas_5y(df: pd.DataFrame) -> Path:
     for s, e in recession_spans(sub):
         plt.axvspan(s, e, color="gray", alpha=0.2, linewidth=0)
 
-    # 1y high/low markers
+    # 1y high/low markers against the same sub-window
     ystart = end - pd.DateOffset(years=1)
     sub1 = sub.loc[sub.index >= ystart]
     for col, color in [("IG_OAS", "#1f77b4"), ("HY_OAS", "#d62728")]:
@@ -82,16 +82,19 @@ def plot_oas_5y(df: pd.DataFrame) -> Path:
             plt.axhline(ymin, color=color, linestyle=":", alpha=0.4)
             plt.axhline(ymax, color=color, linestyle=":", alpha=0.4)
 
-    plt.title("IG vs HY OAS (last 5 years)")
+    plt.title(title)
     plt.ylabel("Spread (%)")
     plt.xlabel("")
     plt.legend()
     plt.tight_layout()
 
-    out = FIG_DIR / "ig_hy_oas_5y.png"
+    out = FIG_DIR / out_name
     plt.savefig(out, dpi=150)
     plt.close()
     return out
+
+def plot_oas_5y(df: pd.DataFrame) -> Path:
+    return plot_oas_window(df, 5, "ig_hy_oas_5y.png", "IG vs HY OAS (last 5 years)")
 
 
 def build_current_table(df: pd.DataFrame) -> pd.DataFrame:
@@ -149,11 +152,13 @@ def render_table_image(table: pd.DataFrame) -> Path:
 def main() -> None:
     df = load()
     chart_path = plot_oas_5y(df)
+    chart_20y = plot_oas_window(df, 20, "ig_hy_oas_20y.png", "IG vs HY OAS (last 20 years)")
     table = build_current_table(df)
     csv_path = FIG_DIR / "current_spreads.csv"
     table.to_csv(csv_path, index=False)
     table_img = render_table_image(table)
     print(f"Saved chart -> {chart_path}")
+    print(f"Saved chart -> {chart_20y}")
     print(f"Saved table -> {table_img}\nCSV -> {csv_path}")
 
 
