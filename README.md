@@ -4,6 +4,11 @@ Tracks and visualizes U.S. corporate bond spreads over time, comparing Investmen
 
 Last updated: 2025-09-07
 
+## Key Charts
+![IG vs HY OAS (last 5y)](reports/figures/ig_hy_oas_5y.png)
+
+![Current Spreads Table](reports/figures/current_spreads.png)
+
 ## Data Sources (FRED CSV)
 - IG OAS: `BAMLC0A0CM`
 - HY OAS: `BAMLH0A0HYM2`

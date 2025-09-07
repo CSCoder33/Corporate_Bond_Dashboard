@@ -5,6 +5,9 @@ on:
     - cron: '15 1 * * *'  # daily at 01:15 UTC
   workflow_dispatch: {}
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,4 +40,3 @@ jobs:
           else
             echo "No changes to commit"
           fi
-
