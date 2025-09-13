@@ -2,7 +2,7 @@
 
 Tracks and visualizes U.S. corporate bond spreads over time, comparing Investment Grade (IG) and High Yield (HY) OAS, and contextualizing against Treasury benchmarks. It also displays recessions which are represented by the grey portions. Outputs charts and a current spreads table and is designed to auto-update daily via GitHub Actions.
 
-Last updated: 2025-09-12
+Last updated: 2025-09-13
 
 ## Key Charts
 ![IG vs HY OAS (last 20y)](reports/figures/ig_hy_oas_20y.png)
